@@ -8,6 +8,7 @@ public class Brick : MonoBehaviour {
 	
 	public Sprite[] hitSprites;
 	public static int breakableBrickCount = 0;
+	public GameObject smoke;
 			
 	private LevelManager levelManager;
 	private int timesHits;
@@ -41,6 +42,7 @@ public class Brick : MonoBehaviour {
 			AudioSource.PlayClipAtPoint(crack, transform.position);
 			breakableBrickCount--;
 			levelManager.BrickDestroyed();
+			PuffSmoke ();
 			Destroy(gameObject);
 		} else {
 			AudioSource.PlayClipAtPoint(boing, transform.position);
@@ -48,10 +50,17 @@ public class Brick : MonoBehaviour {
 		}
 	}
 	
+	void PuffSmoke () {
+		GameObject smokePuff = Instantiate (smoke, gameObject.transform.position, Quaternion.identity) as GameObject;
+		smokePuff.particleSystem.startColor = gameObject.GetComponent<SpriteRenderer>().color;
+	}
+	
 	void LoadSprites () {
 		int spriteIndex = timesHits - 1;
-		if (hitSprites[spriteIndex]) {
+		if (hitSprites[spriteIndex] != null) {
 			this.GetComponent<SpriteRenderer>().sprite = hitSprites[spriteIndex];
+		} else {
+			Debug.LogError("No sprite for brick with type " + this.name + " at index " + spriteIndex + "!");
 		}
 	}
 	
