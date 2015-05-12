@@ -3,6 +3,12 @@ using System.Collections;
 
 public class LevelManager : MonoBehaviour {
 	
+	public void Start () {
+		if (Application.loadedLevel > 1) {
+			audio.Play();
+		}
+	}
+	
 	public void LoadLevel (string name) {
 		//Debug.Log("Loading Level request for: " + name);
 		Brick.breakableBrickCount = 0;
